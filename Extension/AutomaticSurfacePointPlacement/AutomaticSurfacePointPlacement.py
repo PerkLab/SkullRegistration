@@ -15,10 +15,10 @@ class AutomaticSurfacePointPlacement(ScriptedLoadableModule):
 
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
-    self.parent.title = "AutomaticSurfacePointPlacement" # TODO make this more human readable by adding spaces
-    self.parent.categories = ["Examples"]
+    self.parent.title = "Automatic Point Placement" # TODO make this more human readable by adding spaces
+    self.parent.categories = ["US Registration"]
     self.parent.dependencies = []
-    self.parent.contributors = ["Abigael Schonewille (PerkLab)"]
+    self.parent.contributors = ["Abigael Schonewille, Tamas Ungi & Mark Asselin (PerkLab, Queen's University)"]
     self.parent.helpText = """
 This is an example of scripted loadable module bundled in an extension.
 It performs a simple thresholding on the input volume and optionally captures a screenshot.
