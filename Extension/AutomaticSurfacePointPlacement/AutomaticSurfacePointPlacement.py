@@ -16,7 +16,7 @@ class AutomaticSurfacePointPlacement(ScriptedLoadableModule):
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
     self.parent.title = "Automatic Point Placement" # TODO make this more human readable by adding spaces
-    self.parent.categories = ["US Registration"]
+    self.parent.categories = ["Registration.US Skull"]
     self.parent.dependencies = []
     self.parent.contributors = ["Abigael Schonewille, Tamas Ungi & Mark Asselin (PerkLab, Queen's University)"]
     self.parent.helpText = """

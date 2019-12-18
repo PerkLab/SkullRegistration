@@ -1,0 +1,88 @@
+QAbstractButton,
+
+QPushButton {
+    border-style: none; 
+    background-color: #5f98da; 
+    border-color: beige;
+    min-width: 8px;
+    font : bold 12pt "Lucida Sans"; 
+    color: white;
+    padding: 5px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 3px;
+    top: 3px;
+    padding: 0 3px 0 12px;
+}
+
+ctkCollapsibleButton {
+    background-color: #13a795;
+    height: 30px;
+}
+QAbstractButton:pressed,
+
+QPushButton:pressed,
+QPushButton:checked {
+    border-style: none; 
+    background-color: #2762a5; 
+    font : bold 12pt "Lucida Sans"; 
+    color: white;
+    padding: 5px 5px 5px 5px;
+}
+
+QGroupBox, ctkCollapsibleGroupBox {
+    font : bold 12pt "Lucida Sans"; 
+    color : white;
+    border: 2px solid white;
+    padding: 15px 5px 5px 5px;
+}
+
+QGroupBox:QLabel {
+    background: transparent;
+    font bold 10pt "Lucida Sans";
+}
+
+QPushButton#referenceVisButton,
+QPushButton#probeVisButton,
+QPushButton#toolVisButton {
+    background-color: #3c3948;
+}
+
+QLabel {
+    font : bold 12pt "Lucida Sans"; 
+    color : white;
+}
+
+QSpinBox {
+    background-color : #f5f5ff;
+    border: 2px solid #C4C4C3;
+    font : bold 12pt "Lucida Sans";
+}
+
+QComboBox {
+    background-color : #f5f5ff;
+    font : bold 12pt "Lucida Sans"; 
+}
+
+QFrame {
+    background-color: #3c3948;
+    border-color: #3c3948;
+}
+
+QDockWidget:title {
+    background-color: #3c3948;
+    text-align : center;
+}
+
+QDockWidget {
+    color: #ffffff;
+    font : bold 12pt "Lucida Sans"; 
+    height : 40px;
+}
+
+QDialog {
+    background-color: #3c3948;
+    border-color: #3c3948;
+}
