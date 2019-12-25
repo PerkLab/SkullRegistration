@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
+    <width>635</width>
     <height>956</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="ctkCollapsibleButton" name="verifyCollapsibleButton">
      <property name="text">
       <string>Verify</string>
@@ -21,7 +21,7 @@
    <item row="2" column="0">
     <widget class="ctkCollapsibleButton" name="segmentCollapsibleButton">
      <property name="text">
-      <string>Segment</string>
+      <string>Load &amp;&amp; Segment</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
@@ -85,7 +85,7 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="ctkCollapsibleButton" name="registerCollapsibleButton">
      <property name="text">
       <string>Register</string>
@@ -93,10 +93,10 @@
      <layout class="QGridLayout" name="gridLayout_4"/>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="3" column="0">
     <widget class="ctkCollapsibleButton" name="captureCollapsibleButton">
      <property name="text">
-      <string>Capture</string>
+      <string>Capture &amp;&amp; Identify Surface</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_5"/>
     </widget>

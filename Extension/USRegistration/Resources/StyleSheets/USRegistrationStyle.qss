@@ -46,7 +46,7 @@ QGroupBox:QLabel {
 
 QPushButton#referenceVisButton,
 QPushButton#probeVisButton,
-QPushButton#toolVisButton {
+QPushButton#stylusVisButton {
     background-color: #3c3948;
 }
 
