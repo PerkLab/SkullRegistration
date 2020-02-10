@@ -31,7 +31,7 @@ Tracked ultrasound based registration for skull base surgeries performed in the 
 
 ## Contributors
 - Grace Underwood
-- Abigael Schonewille
-- Tamas Ungi
-- Andras Lasso
-- Mark Asselin
+- [Abigael Schonewille](https://github.com/ASchonewille)
+- [Tamas Ungi](https://github.com/ungi)
+- [Andras Lasso](https://github.com/lassoan)
+- [Mark Asselin](https://github.com/markasselin)
