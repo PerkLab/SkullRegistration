@@ -147,6 +147,7 @@ class USRegistrationGuidelet(Guidelet):
     self.uiWidget = slicer.util.loadUI(moduleDirectoryPath + 'Resources/UI/USRegistration.ui')
     self.sliceletPanelLayout.addWidget(self.uiWidget)
     self.ui = slicer.util.childWidgetVariables(self.uiWidget)
+    self.ui.segmentEditorWidget.setMRMLScene(slicer.mrmlScene)
 
     featurePanelList = [
       self.ui.captureCollapsibleButton,

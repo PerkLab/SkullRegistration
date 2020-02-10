@@ -150,7 +150,7 @@
        </widget>
       </item>
       <item row="2" column="1" colspan="2">
-       <widget class="qMRMLSegmentEditorWidget" name="SegmentEditorWidget"/>
+       <widget class="qMRMLSegmentEditorWidget" name="segmentEditorWidget"/>
       </item>
       <item row="4" column="1" colspan="2">
        <widget class="QPushButton" name="pushButton">
