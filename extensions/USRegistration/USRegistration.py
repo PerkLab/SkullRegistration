@@ -147,13 +147,11 @@ class USRegistrationGuidelet(Guidelet):
     self.uiWidget = slicer.util.loadUI(moduleDirectoryPath + 'Resources/UI/USRegistration.ui')
     self.sliceletPanelLayout.addWidget(self.uiWidget)
     self.ui = slicer.util.childWidgetVariables(self.uiWidget)
-    self.ui.segmentEditorWidget.setMRMLScene(slicer.mrmlScene)
 
     featurePanelList = [
       self.ui.captureCollapsibleButton,
       self.ui.segmentCollapsibleButton,
       self.ui.registerCollapsibleButton,
-      self.ui.verifyCollapsibleButton,
       ]
 
     featurePanelList[len(featurePanelList):] = Guidelet.createFeaturePanels(self)
@@ -170,6 +168,7 @@ class USRegistrationGuidelet(Guidelet):
     self.setupTransforms()
     self.setupModels()
     self.setupTransformTree()
+    self.setupSegmentEditor()
 
     # hide slice view annotations (patient name, scale, color bar, etc.) as they
     # decrease reslicing performance by 20%-100%
@@ -270,6 +269,30 @@ class USRegistrationGuidelet(Guidelet):
     self.probeModel.SetAndObserveTransformNodeID(self.probeToReference.GetID())
 
   
+  def setupSegmentEditor(self):
+    self.ui.segmentEditorWidget.setMRMLScene(slicer.mrmlScene)
+    
+    segmentEditorSingletonTag = "LiverRFA.SegmentEditor"
+    segmentEditorNode = slicer.mrmlScene.GetSingletonNode(segmentEditorSingletonTag, "vtkMRMLSegmentEditorNode")
+    if segmentEditorNode is None:
+        segmentEditorNode = slicer.vtkMRMLSegmentEditorNode()
+        segmentEditorNode.SetSingletonTag(segmentEditorSingletonTag)
+        segmentEditorNode = slicer.mrmlScene.AddNode(segmentEditorNode)
+    if self.ui.segmentEditorWidget.mrmlSegmentEditorNode() == segmentEditorNode:
+        # nothing changed
+        return
+    self.ui.segmentEditorWidget.setMRMLSegmentEditorNode(segmentEditorNode)
+
+    # Observe editor effect registrations to make sure that any effects that are registered
+    # later will show up in the segment editor widget. For example, if Segment Editor is set
+    # as startup module, additional effects are registered after the segment editor widget is created.
+    import qSlicerSegmentationsEditorEffectsPythonQt
+    #TODO: For some reason the instance() function cannot be called as a class function although it's static
+    factory = qSlicerSegmentationsEditorEffectsPythonQt.qSlicerSegmentEditorEffectFactory()
+    self.effectFactorySingleton = factory.instance()
+    # self.effectFactorySingleton.connect('effectRegistered(QString)', self.editorEffectRegistered)
+
+
   def setupToolWatchdog(self):
     logging.debug('USRegistrationGuidelet.setupToolVisibilityIcons')
     self.ui.referenceVisButton.setIcon(qt.QIcon(os.path.join(self.moduleIconsPath, 'TrackingStatusRed.svg')))
@@ -308,38 +331,46 @@ class USRegistrationGuidelet(Guidelet):
 
     # panels
     self.ui.captureCollapsibleButton.connect('toggled(bool)', self.onCapturePanelToggled)
-    self.ui.segmentCollapsibleButton.connect('toggled(bool)', self.onSegmentPanelToggled)
     self.ui.registerCollapsibleButton.connect('toggled(bool)', self.onRegisterPanelToggled)
-    self.ui.verifyCollapsibleButton.connect('toggled(bool)', self.onVerifyPanelToggled)
+    self.ui.segmentCollapsibleButton.connect('toggled(bool)', self.onSegmentPanelToggled)
+
+    # load & segment panel
+    self.ui.loadPatientDataButton.connect('clicked(bool)', self.onLoadPatientDataClicked)
+    self.ui.createModelButton.connect('clicked(bool)', self.onCreateModelClicked)
 
     # capture panel
-
-    # segment panel
+    self.ui.deleteSeqButton.connect('clicked(bool)', self.onDeleteSeqClicked)
+    self.ui.loadTFModelButton.connect('clicked(bool)', self.onLoadTFModelClicked)
+    self.ui.pauseRecButton.connect('clicked(bool)', self.onPauseRecClicked)
+    self.ui.startStopRecButton.connect('clicked(bool)', self.onStartStopRec)
 
     # register panel
-
-    # verify panel
-
+    self.ui.performRegButton.connect('clicked(bool)', self.onPerformRegClicked)
+    
 
   def disconnect(self):
     logging.debug('USRegistrationGuidelet.disconnect')
     Guidelet.disconnect(self)
 
-     # panels
-    self.ui.captureCollapsibleButton.disconnect('toggled(bool)', self.onCapturePanelToggled)
-    self.ui.segmentCollapsibleButton.disconnect('toggled(bool)', self.onSegmentPanelToggled)
-    self.ui.registerCollapsibleButton.disconnect('toggled(bool)', self.onRegisterPanelToggled)
-    self.ui.verifyCollapsibleButton.disconnect('toggled(bool)', self.onVerifyPanelToggled)
+    # panels
+    self.ui.captureCollapsibleButton.disconnect('clicked(bool)', self.onCapturePanelToggled)
+    self.ui.registerCollapsibleButton.disconnect('clicked(bool)', self.onRegisterPanelToggled)
+    self.ui.segmentCollapsibleButton.disconnect('clicked(bool)', self.onSegmentPanelToggled)
+
+    # load & segment panel
+    self.ui.loadPatientDataButton.disconnect('clicked(bool)', self.onLoadPatientDataClicked)
+    self.ui.createModelButton.disconnect('clicked(bool)', self.onCreateModelClicked)
 
     # capture panel
-
-    # segment panel
+    self.ui.deleteSeqButton.disconnect('clicked(bool)', self.onDeleteSeqClicked)
+    self.ui.loadTFModelButton.disconnect('clicked(bool)', self.onLoadTFModelClicked)
+    self.ui.pauseRecButton.disconnect('clicked(bool)', self.onPauseRecClicked)
+    self.ui.startStopRecButton.disconnect('clicked(bool)', self.onStartStopRec)
 
     # register panel
+    self.ui.performRegButton.disconnect('clicked(bool)', self.onPerformRegClicked)
 
-    # verify panel
- 
- 
+
 #--------------------------------------------------------------------------------------------------
 # callbacks: panel toggled
 
@@ -352,36 +383,68 @@ class USRegistrationGuidelet(Guidelet):
   def onSegmentPanelToggled(self, toggled):
     logging.debug('USRegistrationGuidelet.onSamplingPanelToggled')
     if toggled:
-      self.selectView(self.VIEW_4UP)
+      pass #self.selectView(self.VIEW_4UP)
 
 
   def onRegisterPanelToggled(self, toggled):
     logging.debug('USRegistrationGuidelet.onDataPanelToggled')
     if toggled:
-      self.selectView(self.VIEW_3D)
+      pass #self.selectView(self.VIEW_3D)
+
+#--------------------------------------------------------------------------------------------------
+# callbacks: load & segment panel
+
+  def onLoadPatientDataClicked(self):
+    print("load patient data")
+    logging.debug('USRegistrationGuidelet.onLoadPatientDataClicked')
+    loadDialog = LoadPatientDataDialog(stylesheet=self.getStylesheet())
+    res = loadDialog.show()
+    if res:
+      # load volume & model (if specified)
+      volumePath = loadDialog.getVolumePath()
+      self.ui.volumePathLabel.setText(volumePath)
+      volumeNode = slicer.util.loadVolume(volumePath)
+      volumeNode.SetName('Image')
+
+      modelPath = loadDialog.getModelPath()
+      if modelPath is not None and modelPath != '':
+        self.ui.modelPathLabel.setText(modelPath)
+        modelNode = slicer.util.loadModel(modelPath)
+        modelNode.SetName('SkullModel')
+      else:
+        # user didn't select pre-segmented model
+        # enable segmentation & model creation wizard
+        self.ui.modelCreationGroupBox.collapsed = False
 
 
-  def onVerifyPanelToggled(self, toggled):
-    logging.debug('USRegistrationGuidelet.onDataPanelToggled')
-    if toggled:
-      self.selectView(self.VIEW_4UP)
+  def onCreateModelClicked(self):
+    logging.debug('USRegistrationGuidelet.onCreateModelClicked')
 
 
 #--------------------------------------------------------------------------------------------------
 # callbacks: capture panel
 
+  def onDeleteSeqClicked(self):
+    logging.debug('USRegistrationGuidelet.onDeleteSeqClicked')
 
-#--------------------------------------------------------------------------------------------------
-# callbacks: segment panel
 
+  def onLoadTFModelClicked(self):
+    logging.debug('USRegistrationGuidelet.onLoadTFModelClicked')
+
+
+  def onPauseRecClicked(self):
+    logging.debug('USRegistrationGuidelet.onPauseRecClicked')
+
+
+  def onStartStopRec(self):
+    logging.debug('USRegistrationGuidelet.onStartStopRec')
 
 
 #--------------------------------------------------------------------------------------------------
 # callbacks: register panel
 
-
-#--------------------------------------------------------------------------------------------------
-# callbacks: verify panel
+  def onPerformRegClicked(self):
+    logging.debug('USRegistrationGuidelet.onPerformRegClicked')
 
 
 #--------------------------------------------------------------------------------------------------
@@ -424,6 +487,18 @@ class USRegistrationGuidelet(Guidelet):
       self.probeInView = False
       self.stylusInView = False
 
+
+#--------------------------------------------------------------------------------------------------
+# volume loading logic
+
+#--------------------------------------------------------------------------------------------------
+# model loading / creation logic
+
+#--------------------------------------------------------------------------------------------------
+# surface point creation logic
+
+#--------------------------------------------------------------------------------------------------
+# registration logic
 
 #--------------------------------------------------------------------------------------------------
 # get stylesheet
@@ -515,3 +590,198 @@ class OkDialog(qt.QDialog):
   def show(self):
     logging.debug('OkDialog.show')
     self.exec_()
+
+#--------------------------------------------------------------------------------------------------
+# dialogs
+
+#-----------------------------------------------------
+# OK dialog
+class OkDialog(qt.QDialog):
+
+  def __init__(self, parent=None, stylesheet=None):
+    qt.QDialog.__init__(self, parent)
+    self.setupUi()
+    self.okButton.connect('clicked(bool)', self.onOkButtonClicked)
+    self.setStyleSheet(stylesheet)
+
+  def setupUi(self):
+    logging.debug('OkDialog.setupUi')
+    layout = qt.QVBoxLayout()
+    self.infoLabel = qt.QLabel('')
+    layout.addWidget(self.infoLabel)
+    self.buttonBox = qt.QDialogButtonBox()
+    self.okButton = self.buttonBox.addButton(qt.QDialogButtonBox.Ok)
+    self.okButton.setStyleSheet('padding: 0px 40px 0px 40px;')
+    layout.addWidget(self.buttonBox)
+    self.setLayout(layout)
+    self.setWindowModality(qt.Qt.ApplicationModal)
+    
+    
+  def setInfoMessage(self, message):
+    logging.debug('OkDialog.setInfoMessage')
+    self.infoLabel.setText(message)
+
+
+  def onOkButtonClicked(self):
+    logging.debug('OkDialog.onOkButtonClicked')
+    self.done(0)
+
+
+  def show(self):
+    logging.debug('OkDialog.show')
+    self.exec_()
+
+#-----------------------------------------------------
+# Yes/No dialog
+class YesNoDialog(qt.QDialog):
+
+  def __init__(self, parent=None, stylesheet=None):
+    qt.QDialog.__init__(self, parent)
+    self.setupUi()
+    self.yesButton.connect('clicked(bool)', self.onYesButtonClicked)
+    self.noButton.connect('clicked(bool)', self.onNoButtonClicked)
+    self.setStyleSheet(stylesheet)
+
+  def setupUi(self):
+    logging.debug('YesNoDialog.setupUi')
+    layout = qt.QVBoxLayout()
+    self.infoLabel = qt.QLabel('')
+    layout.addWidget(self.infoLabel)
+    self.buttonBox = qt.QDialogButtonBox()
+    self.yesButton = self.buttonBox.addButton(qt.QDialogButtonBox.Yes)
+    self.noButton = self.buttonBox.addButton(qt.QDialogButtonBox.No)
+    self.yesButton.setStyleSheet('padding: 0px 40px 0px 40px;')
+    self.noButton.setStyleSheet('padding: 0px 40px 0px 40px;')
+    layout.addWidget(self.buttonBox)
+    self.setLayout(layout)
+    self.setWindowModality(qt.Qt.ApplicationModal)
+    
+    
+  def setInfoMessage(self, message):
+    logging.debug('YesNoDialog.setInfoMessage')
+    self.infoLabel.setText(message)
+
+
+  def onYesButtonClicked(self):
+    logging.debug('YesNoDialog.onYesButtonClicked')
+    self.done(1)
+
+
+  def onNoButtonClicked(self):
+    logging.debug('YesNoDialog.onNoButtonClicked')
+    self.done(0)
+
+
+  def show(self):
+    logging.debug('YesNoDialog.show')
+    return self.exec_()
+
+
+#-----------------------------------------------------
+# Patient data dialog
+class LoadPatientDataDialog(qt.QDialog):
+
+  def __init__(self, parent=None, stylesheet=None, preopPathHint=None, planPathHint=None):
+    qt.QDialog.__init__(self, parent)
+
+    self._volumePath = None
+    self._modelPath = None
+  
+    self.setWindowTitle("Load Patient Data")
+    self.setupUi()
+    # setup connections
+    self.setupConnections()
+    # style
+    self.stylesheet = stylesheet
+    self.setStyleSheet(self.stylesheet)
+    self.setFixedWidth(800)
+    
+
+  def setupUi(self):
+    logging.debug('LoadPatientDataDialog.setupUi')
+    layout = qt.QGridLayout()
+    # load patient volume
+    self.volumeBtn = qt.QPushButton('Choose Image')
+    self.volumePathLabel = qt.QLabel('')
+    layout.addWidget(self.volumeBtn, 0, 0)
+    layout.addWidget(self.volumePathLabel, 0, 1, 1, 2)
+
+    # load patient pre-segmented model (optional)
+    self.modelBtn = qt.QPushButton('Choose Model')
+    self.modelPathLabel = qt.QLabel('')
+    layout.addWidget(self.modelBtn, 1, 0)
+    layout.addWidget(self.modelPathLabel, 1, 1, 1, 2) 
+    
+    # ok button
+    self.okBtn = qt.QPushButton('Ok')
+    self.cancelBtn = qt.QPushButton('Cancel')
+    layout.addWidget(self.okBtn, 3, 1)
+    layout.addWidget(self.cancelBtn, 3, 2)
+    self.setLayout(layout)
+    self.setWindowModality(qt.Qt.ApplicationModal)
+    
+
+  def setupConnections(self):
+    # connections
+    self.volumeBtn.connect('clicked(bool)', self.onVolumeBtn)
+    self.modelBtn.connect('clicked(bool)', self.onModelBtn)
+    self.okBtn.connect('clicked(bool)', self.onOkBtn)
+    self.cancelBtn.connect('clicked(bool)', self.onCancelBtn)
+
+
+  def onVolumeBtn(self):
+    logging.debug('LoadPatientDataDialog.onVolumeBtn')   
+    from pathlib import Path
+    pathHint = str(Path.home())
+    self._volumePath = qt.QFileDialog.getOpenFileName(self,
+      'Select Patient Image (nrrd, nifti)', pathHint, "Image files (*.nrrd *.nii)")
+    self.volumePathLabel.setText(self._volumePath)
+
+
+  def onModelBtn(self):
+    logging.debug('LoadPatientDataDialog.onModelBtn')
+    from pathlib import Path
+    pathHint = str(Path.home())
+    self._modelPath = qt.QFileDialog.getOpenFileName(self,
+      'Select Patient Skull Model (stl, obj)', pathHint, "Model files (*.stl *.obj)")
+    self.modelPathLabel.setText(self._modelPath)
+
+
+  def onOkBtn(self):
+    logging.debug('LoadPatientDataDialog.onOkBtn')
+    
+    if self._volumePath is None or self._volumePath == '':
+      dialog = OkDialog(stylesheet=self.stylesheet)
+      dialog.setWindowTitle('No Patient Image Selected')
+      dialog.setInfoMessage('Please select a valid image file for this patient.')
+      dialog.show()
+      return
+
+    if self._modelPath is None or self._modelPath == '':
+      dialog = YesNoDialog(stylesheet=self.stylesheet)
+      dialog.setWindowTitle('No Patient Model Selected')
+      dialog.setInfoMessage('Did you intend to select a pre-segmented patient model?')
+      res = dialog.show()
+      if res:
+        # users wishes to select a model, return to LoadPatientDataDialog
+        return
+
+    self.done(1)
+
+
+  def onCancelBtn(self):
+    logging.debug('LoadPatientDataDialog.onCancelBtn')
+    self.done(0)
+    
+
+  def getVolumePath(self):
+    return self._volumePath
+
+  
+  def getModelPath(self):
+    return self._modelPath
+
+
+  def show(self):
+    logging.debug('LoadPatientDataDialog.show')
+    return self.exec_()

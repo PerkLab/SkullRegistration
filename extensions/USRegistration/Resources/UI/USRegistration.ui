@@ -11,159 +11,8 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="7" column="0">
-    <widget class="ctkCollapsibleButton" name="captureCollapsibleButton">
-     <property name="text">
-      <string>Capture &amp;&amp; Identify Surface</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0" colspan="3">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Record Sequence:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="3">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Surface Recognition:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Min Inter-Point Distance:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Segmentation Threshold:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Output Markups:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2">
-       <widget class="ctkDoubleSlider" name="DoubleSlider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="3">
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Load TensorFlow Model</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1" colspan="2">
-       <widget class="ctkDoubleSpinBox" name="DoubleSpinBox"/>
-      </item>
-      <item row="7" column="1" colspan="2">
-       <widget class="qMRMLNodeComboBox" name="MRMLNodeComboBox"/>
-      </item>
-      <item row="1" column="0" colspan="3">
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="ctkCollapsibleButton" name="verifyCollapsibleButton">
-     <property name="text">
-      <string>Verify</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_6">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_11">
-        <property name="text">
-         <string>Mean Distance Post Registration:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_12">
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="ctkCollapsibleButton" name="segmentCollapsibleButton">
-     <property name="text">
-      <string>Load &amp;&amp; Segment</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="1" colspan="3">
-       <widget class="QPushButton" name="loadVolButton">
-        <property name="text">
-         <string>Load Volume</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QLabel" name="loadedVolPathLabel">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Output Model:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="qMRMLNodeComboBox" name="MRMLNodeComboBox_2"/>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Loaded Volume:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" colspan="2">
-       <widget class="qMRMLSegmentEditorWidget" name="segmentEditorWidget"/>
-      </item>
-      <item row="4" column="1" colspan="2">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Create Model</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QGridLayout" name="toolStatusLayout">
      <item row="0" column="2">
       <widget class="QPushButton" name="stylusVisButton">
        <property name="text">
@@ -217,30 +66,205 @@
      </item>
     </layout>
    </item>
+   <item row="2" column="0">
+    <widget class="ctkCollapsibleButton" name="segmentCollapsibleButton">
+     <property name="text">
+      <string>Load &amp;&amp; Segment</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>Model Path:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="3">
+       <widget class="ctkCollapsibleGroupBox" name="modelCreationGroupBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="title">
+         <string>Segmentation Tools</string>
+        </property>
+        <property name="collapsed">
+         <bool>true</bool>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Output Model:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="qMRMLNodeComboBox" name="outputModelComboBox"/>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="qMRMLSegmentEditorWidget" name="segmentEditorWidget">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" colspan="2">
+          <widget class="QPushButton" name="createModelButton">
+           <property name="text">
+            <string>Create Model</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="3">
+       <widget class="QPushButton" name="loadPatientDataButton">
+        <property name="text">
+         <string>Load Patient Data</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Image Path:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" colspan="2">
+       <widget class="QLabel" name="volumePathLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" colspan="2">
+       <widget class="QLabel" name="modelPathLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="8" column="0">
     <widget class="ctkCollapsibleButton" name="registerCollapsibleButton">
      <property name="text">
       <string>Register</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_9">
+      <item row="0" column="1" colspan="2">
+       <widget class="QPushButton" name="performRegButton">
         <property name="text">
-         <string>Output Transform:</string>
+         <string>Perform Registration</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_8">
+      <item row="3" column="1" colspan="2">
+       <widget class="QLabel" name="meanDistPostRegLabel">
         <property name="text">
-         <string>Input Model:</string>
+         <string>Mean Distance Post Registration:</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_10">
+     </layout>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="ctkCollapsibleButton" name="captureCollapsibleButton">
+     <property name="text">
+      <string>Capture &amp;&amp; Identify Surface</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="7" column="1" colspan="2">
+       <widget class="ctkDoubleSpinBox" name="interPointDistSpinBox">
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>10.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Input Markups:</string>
+         <string>Segmentation Threshold:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Min Inter-Point Distance:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1" colspan="2">
+       <widget class="qMRMLNodeComboBox" name="outputMarkupsComboBox"/>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Record Sequence:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="3">
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="2">
+       <widget class="ctkDoubleSlider" name="segThresSlider">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="3">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Surface Recognition:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="3">
+       <widget class="QPushButton" name="loadTFModelButton">
+        <property name="text">
+         <string>Load TensorFlow Model</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Output Markups:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="3">
+       <widget class="QPushButton" name="startStopRecButton">
+        <property name="text">
+         <string>Start Recording</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="3">
+       <widget class="QPushButton" name="deleteSeqButton">
+        <property name="text">
+         <string>Delete Sequence &amp;&amp; Reset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QPushButton" name="pauseRecButton">
+        <property name="text">
+         <string>Pause Recording</string>
         </property>
        </widget>
       </item>
@@ -254,6 +278,12 @@
    <class>ctkCollapsibleButton</class>
    <extends>QWidget</extends>
    <header>ctkCollapsibleButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ctkCollapsibleGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>ctkCollapsibleGroupBox.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
