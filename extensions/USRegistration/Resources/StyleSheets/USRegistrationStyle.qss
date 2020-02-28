@@ -86,3 +86,10 @@ QDialog {
     background-color: #3c3948;
     border-color: #3c3948;
 }
+
+QFrame[frameShape="4"] {
+    border-width: 2px;
+    border-color: white;
+    border-style: solid;
+    color: white;
+}

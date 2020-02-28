@@ -147,6 +147,8 @@ class USRegistrationGuidelet(Guidelet):
     self.uiWidget = slicer.util.loadUI(moduleDirectoryPath + 'Resources/UI/USRegistration.ui')
     self.sliceletPanelLayout.addWidget(self.uiWidget)
     self.ui = slicer.util.childWidgetVariables(self.uiWidget)
+    self.ui.line.setFrameShadow(qt.QFrame.Plain)
+    self.ui.line_2.setFrameShadow(qt.QFrame.Plain)
 
     featurePanelList = [
       self.ui.captureCollapsibleButton,
